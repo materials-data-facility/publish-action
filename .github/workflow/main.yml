@@ -1,0 +1,29 @@
+on: [push]
+
+jobs:
+  push_publish_job:
+    runs-on: ubuntu-latest
+    name: Job to Push Data to Object Store and Publish to MDF
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Push and Publish Step
+        uses: ./
+        id: push_publish
+        with:
+          globus_auth_client_id: "c296acd8-f454-4ad7-b582-51a48685e775"
+          globus_auth_secret: "gkdmTz8cE+7hS/uo8JPmXE7xtsIJ1xg+2AC2AlHF5g="
+          files_to_publish: "README.md"
+          mdf_source_id: "123"
+          mdf_title: "Test"
+          mdf_authors: "Shriram, Ben"
+          mdf_affiliations: "UIUC, NCSA"
+          mdf_publication_year: "2023"
+          staging_object_store_url: "https://ncsa.osn.xsede.org"
+          aws_access_key_id: "26MOSBG730GB5GQKLMPJ"
+          aws_secret_access_key: "S8aT/cgh/TedtMlQlnvKr7BnsCBjno"
+          s3_bucket_id: "che230022-bucket01"
+          s3_bucket_path: "/qmc_graphene_stacking_fault/0_interlayer_energy/data/"
+      # Use the output from the `hello` step
+      - name: Get the output time
+        run: echo "${{ steps.push_publish.outputs.logs }}"

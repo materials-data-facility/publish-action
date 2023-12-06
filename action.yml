@@ -1,0 +1,49 @@
+# action.yml
+name: "Fetch and Push"
+inputs:
+  globus_auth_client_id:
+    description: "Globus Auth Application Client ID"
+    required: true
+  globus_auth_secret:
+    description: "Globus Auth Application Secret"
+    required: true
+  files_to_publish:
+    description: "File Paths to Publish"
+    required: true
+  mdf_source_id:
+    description: "Source ID for Dataset in Materials Data Facility"
+    required: true
+  mdf_title:
+    description: "Dataset Title to Submit"
+    required: true
+  mdf_authors:
+    description: "Dataset Authors"
+    required: true
+  mdf_affiliations:
+    description: "Dataset Author Organization Affiliations"
+    required: true
+  mdf_publication_year:
+    description: "Dataset Publication Year"
+    required: true
+  staging_object_store_url:
+    description: "Staging Object Store URL"
+    required: true
+  aws_access_key_id:
+    description: "AWS Access Key ID"
+    required: true
+  aws_secret_access_key:
+    description: "AWS Secrey Access Key"
+    required: true
+  s3_bucket_id:
+    description: "S3 bucket ID"
+    required: true
+  s3_bucket_path:
+    description: "S3 Bucket Path"
+    required: true
+outputs:
+  logs:
+    description: "Logs on processing"
+
+runs:
+  using: "docker"
+  image: "Dockerfile"
