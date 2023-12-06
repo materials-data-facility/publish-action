@@ -6,7 +6,7 @@ def main():
     # Get action inputs
     _, globus_auth_client_id, globus_auth_secret, \
     files_to_publish, mdf_source_id, mdf_title, mdf_authors, mdf_affiliations, \
-    mdf_publication_year, staging_object_store_url, aws_access_key_id \
+    mdf_publication_year, staging_object_store_url, aws_access_key_id, \
     aws_secret_access_key, s3_bucket_id, s3_bucket_path
      = sys.argv 
 

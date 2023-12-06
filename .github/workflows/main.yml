@@ -26,6 +26,5 @@ jobs:
           aws_secret_access_key: "S8aT/cgh/TedtMlQlnvKr7BnsCBjno"
           s3_bucket_id: "che230022-bucket01"
           s3_bucket_path: "/qmc_graphene_stacking_fault/0_interlayer_energy/data/"
-      # Use the output from the `hello` step
-      - name: Get the output time
+      - name: Get the output logs
         run: echo "${{ steps.push_publish.outputs.logs }}"
