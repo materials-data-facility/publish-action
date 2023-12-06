@@ -1,5 +1,6 @@
 # action.yml
-name: "Fetch and Push"
+name: "Push and Publish to MDF"
+description: "Push Data to Staging area and publish the public URL to MDF"
 inputs:
   globus_auth_client_id:
     description: "Globus Auth Application Client ID"
