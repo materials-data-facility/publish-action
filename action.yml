@@ -48,3 +48,17 @@ outputs:
 runs:
   using: "docker"
   image: "Dockerfile"
+  args:
+    - ${{ inputs.globus_auth_client_id }}
+    - ${{ inputs.globus_auth_secret }}
+    - ${{ inputs.files_to_publish }}
+    - ${{ inputs.mdf_source_id }}
+    - ${{ inputs.mdf_title }}
+    - ${{ inputs.mdf_authors }}
+    - ${{ inputs.mdf_affiliations }}
+    - ${{ inputs.mdf_publication_year }}
+    - ${{ inputs.staging_object_store_url }}
+    - ${{ inputs.aws_access_key_id }}
+    - ${{ inputs.aws_secret_access_key }}
+    - ${{ inputs.s3_bucket_id }}
+    - ${{ inputs.s3_bucket_path }}
