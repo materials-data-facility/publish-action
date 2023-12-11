@@ -1,6 +1,8 @@
 # main.py
 import sys
 import boto3
+from mdf_connect_client import MDFConnectClient
+import mdf_toolbox
 
 _, globus_auth_client_id, globus_auth_secret, \
     files_to_publish, mdf_source_id, mdf_title, mdf_authors, mdf_affiliations, \
@@ -26,6 +28,30 @@ def upload_s3(bucket_id, object_path, file):
 
     return url
 
+def mdf_publish(source_urls):
+    auths = mdf_toolbox.confidential_login(client_id=globus_auth_client_id,
+                                        client_secret=globus_auth_secret,
+                                        services=["mdf_connect", "mdf_connect_dev"],
+                                        make_clients=True)
+
+    mdfcc = MDFConnectClient(authorizer=auths['mdf_connect'])
+
+    mdfcc.create_dc_block(title=mdf_title, authors=mdf_authors, affiliations=mdf_affiliations, publication_year=mdf_publication_year)
+
+    for url in source_urls:
+        mdfcc.add_data_source(url)
+
+    mdfcc.add_service("mdf_publish")
+
+    if mdf_source_id:
+        mdfcc.set_incremental_update(mdf_source_id)
+
+    print("MDF Submission: ", mdfcc.get_submission())
+
+    if mdf_source_id:
+        print("MDF Submit Update Response: ", mdfcc.submit_dataset(update=True))
+    else:
+        print("MDF Submit Original Response: ", mdfcc.submit_dataset())
 
 def main():
     print('Input Data:-')
@@ -50,11 +76,7 @@ def main():
     for file in files_list:
         source_urls.append(upload_s3(s3_bucket_id, f"{s3_bucket_path}{file}", file))
 
-    print(source_urls)
+    mdf_publish(source_urls)
 
-
-
-
- 
 if __name__ == "__main__": 
     main()

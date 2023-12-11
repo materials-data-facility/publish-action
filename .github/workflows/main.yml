@@ -25,4 +25,4 @@ jobs:
           aws_access_key_id: "26MOSBG730GB5GQKLMPJ"
           aws_secret_access_key: "S8aT/cgh/TedtMlQlnvKr7BnsCBjno"
           s3_bucket_id: "che230022-bucket01"
-          s3_bucket_path: "/qmc_graphene_stacking_fault/0_interlayer_energy/data/"
+          s3_bucket_path: "qmc_graphene_stacking_fault/0_interlayer_energy/data/"
