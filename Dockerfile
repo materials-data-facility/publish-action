@@ -6,6 +6,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD [ "ls", "-R"]
+RUN ls -R .
 
 ENTRYPOINT ["python", "main.py"]
