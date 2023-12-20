@@ -1,11 +1,11 @@
 FROM python:3.10
 
-COPY requirements.txt /app
+COPY requirements.txt ./
 
-RUN pip install --no-cache-dir -r /app/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /app
+COPY . .
 
-RUN pwd ; ls -R
+RUN pwd | ls -R
 
-ENTRYPOINT ["python", "/app/main.py"]
+ENTRYPOINT ["python", "/main.py"]
