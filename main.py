@@ -3,6 +3,10 @@ import sys
 import boto3
 from mdf_connect_client import MDFConnectClient
 import mdf_toolbox
+import os
+
+current_working_directory = os.getcwd()
+print("Current Working Directory: ", current_working_directory)
 
 _, globus_auth_client_id, globus_auth_secret, \
     files_to_publish, mdf_source_id, mdf_title, mdf_authors, mdf_affiliations, \
