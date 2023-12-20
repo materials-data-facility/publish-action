@@ -1,6 +1,6 @@
 FROM python:3.10
 
-WORKDIR /github/workspace
+WORKDIR /app
 
 COPY requirements.txt ./
 
@@ -8,4 +8,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-ENTRYPOINT ["python", "main.py"]
+RUN pwd ; ls -R
+
+ENTRYPOINT ["python", "/app/main.py"]
