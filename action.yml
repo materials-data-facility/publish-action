@@ -13,7 +13,6 @@ inputs:
     required: true
   mdf_source_id:
     description: "Source ID for Dataset in Materials Data Facility"
-    required: true
   mdf_title:
     description: "Dataset Title to Submit"
     required: true
