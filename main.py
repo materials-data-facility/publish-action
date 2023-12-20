@@ -49,9 +49,15 @@ def mdf_publish(source_urls):
     print("MDF Submission: ", mdfcc.get_submission())
 
     if mdf_source_id:
-        print("MDF Submit Update Response: ", mdfcc.submit_dataset(update=True))
+        submit_response = mdfcc.submit_dataset(update=True)
+        print("MDF Submit Update Response: ", submit_response)
+        if submit_response["status_code"] != "200":
+            sys.exit(1)
     else:
-        print("MDF Submit Original Response: ", mdfcc.submit_dataset())
+        submit_response = mdfcc.submit_dataset()
+        print("MDF Submit Original Response: ", submit_response)
+        if submit_response["status_code"] != "200":
+            sys.exit(1)
 
 def main():
     print('Input Data:-')
