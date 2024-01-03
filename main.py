@@ -9,9 +9,11 @@ current_working_directory = os.getcwd()
 print("Current Working Directory: ", current_working_directory)
 
 _, globus_auth_client_id, globus_auth_secret, \
-    files_to_publish, mdf_source_id, mdf_title, mdf_authors, mdf_affiliations, \
-    mdf_publication_year, staging_object_store_url, aws_access_key_id, \
+   paths_to_publish, mdf_source_id, mdf_title, mdf_authors, mdf_affiliations, \
+    mdf_publication_year, staging_object_store_url, is_test_str, aws_access_key_id, \
     aws_secret_access_key, s3_bucket_id, s3_bucket_path = sys.argv 
+
+is_test = is_test_str == "true"
 
 s3 = boto3.client('s3',
                   endpoint_url=staging_object_store_url,
@@ -20,6 +22,7 @@ s3 = boto3.client('s3',
 
 
 def upload_s3(bucket_id, object_path, file):
+    print(f"Uploading {file}")
     with open(file, "rb") as f:
         s3.upload_fileobj(f, bucket_id, object_path)
 
@@ -42,6 +45,8 @@ def mdf_publish(source_urls):
 
     mdfcc.create_dc_block(title=mdf_title, authors=mdf_authors, affiliations=mdf_affiliations, publication_year=mdf_publication_year)
 
+    mdfcc.set_test(is_test)
+
     for url in source_urls:
         mdfcc.add_data_source(url)
 
@@ -52,41 +57,70 @@ def mdf_publish(source_urls):
 
     print("MDF Submission: ", mdfcc.get_submission())
 
-    if mdf_source_id:
-        submit_response = mdfcc.submit_dataset(update=True)
-        print("MDF Submit Update Response: ", submit_response)
-        if submit_response["status_code"] != "200":
-            sys.exit(1)
-    else:
-        submit_response = mdfcc.submit_dataset()
-        print("MDF Submit Original Response: ", submit_response)
-        if submit_response["status_code"] != "200":
-            sys.exit(1)
+    is_update = bool(mdf_source_id)
+
+    submit_response = mdfcc.submit_dataset(update=is_update)
+    print("MDF Submit Update Response: ", submit_response)
+
+    if not submit_response['success']:
+        print(f"Submission Failed: {submit_response['error']}")
+        sys.exit(1)
+
+
+def list_files(path, recursive=False):
+    """
+    Recursively list files in a directory.
+
+    Args:
+    path: The directory to list files in.
+    recursive: Whether to recursively list files in subdirectories.
+
+    Returns:
+    A list of file paths.
+    """
+    files = []
+    if os.path.isfile(path):
+        files.append(path)
+    elif os.path.isdir(path):
+        for item in os.listdir(path):
+          item_path = os.path.join(path, item)
+          if os.path.isfile(item_path):
+            files.append(item_path)
+          elif recursive and os.path.isdir(item_path):
+            files += list_files(item_path, recursive)
+    return files
 
 def main():
     print('Input Data:-')
     print(f'Globus Auth Client ID: {globus_auth_client_id}')
     print(f'Globus Auth Secret: {globus_auth_secret}')
-    print(f'Files to Publish: {files_to_publish}')
+    print(f'Paths to Publish: {paths_to_publish}')
     print(f'MDF Source ID: {mdf_source_id}')
     print(f'MDF Title: {mdf_title}')
     print(f'MDF Authors: {mdf_authors}')
     print(f'MDF Affiliations: {mdf_affiliations}')
     print(f'MDF Publication Year: {mdf_publication_year}')
     print(f'Staging Object Store URL: {staging_object_store_url}')
+    print(f'Is Test: {is_test_str} -> {is_test}')
     print(f'AWS Access Key ID: {aws_access_key_id}')
     print(f'AWS Secret Access Key: {aws_secret_access_key}')
     print(f'S3 Bucket ID: {s3_bucket_id}')
     print(f'S3 Bucket Path: {s3_bucket_path}')
 
-    files_list = files_to_publish.split(",")
+    path_list = paths_to_publish.split(",")
 
 
     source_urls = []
-    for file in files_list:
-        source_urls.append(upload_s3(s3_bucket_id, f"{s3_bucket_path}{file}", file))
+    for path in path_list:
+        print(f"Searchiung in {path}")
+        files = list_files(path, recursive=True)
+        print(f"Files = {files}")
+        for file in files: 
+            source_urls.append(upload_s3(s3_bucket_id, f"{s3_bucket_path}{file}", file))
 
     mdf_publish(source_urls)
 
 if __name__ == "__main__": 
     main()
+    print("Publish success")
+    sys.exit(0)
