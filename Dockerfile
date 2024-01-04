@@ -5,7 +5,6 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+RUN chmod +x /main.sh
 
-RUN cd /github/workspace && pwd && ls -R
-
-ENTRYPOINT ["python", "/main.py"]
+ENTRYPOINT ["/main.sh"]

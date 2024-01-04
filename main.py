@@ -1,12 +1,12 @@
 # main.py
 import sys
 import boto3
+
 from mdf_connect_client import MDFConnectClient
 import mdf_toolbox
 import os
 
 current_working_directory = os.getcwd()
-print("Current Working Directory: ", current_working_directory)
 
 _, globus_auth_client_id, globus_auth_secret, \
    paths_to_publish, mdf_source_id, mdf_title, mdf_authors, mdf_affiliations, \
@@ -60,6 +60,7 @@ def mdf_publish(source_urls):
     is_update = bool(mdf_source_id)
 
     submit_response = mdfcc.submit_dataset(update=is_update)
+
     print("MDF Submit Update Response: ", submit_response)
 
     if not submit_response['success']:
@@ -107,8 +108,7 @@ def main():
     print(f'S3 Bucket ID: {s3_bucket_id}')
     print(f'S3 Bucket Path: {s3_bucket_path}')
 
-    path_list = paths_to_publish.split(",")
-
+    path_list = [path.lstrip() for path in paths_to_publish.split(",")]
 
     source_urls = []
     for path in path_list:
