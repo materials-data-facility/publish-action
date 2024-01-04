@@ -6,7 +6,6 @@ from mdf_connect_client import MDFConnectClient
 import mdf_toolbox
 import os
 
-current_working_directory = os.getcwd()
 
 _, globus_auth_client_id, globus_auth_secret, \
    paths_to_publish, mdf_source_id, mdf_title, mdf_authors, mdf_affiliations, \
@@ -35,7 +34,7 @@ def upload_s3(bucket_id, object_path, file):
 
     return url
 
-def mdf_publish(source_urls):
+def mdf_publish(source_urls) -> str:
     auths = mdf_toolbox.confidential_login(client_id=globus_auth_client_id,
                                         client_secret=globus_auth_secret,
                                         services=["mdf_connect", "mdf_connect_dev"],
@@ -52,12 +51,13 @@ def mdf_publish(source_urls):
 
     mdfcc.add_service("mdf_publish")
 
-    if mdf_source_id:
+    # If they provide us with a source ID then assume this is an update to that dataset
+    is_update = bool(mdf_source_id)
+
+
+    if us_update:
         mdfcc.set_incremental_update(mdf_source_id)
 
-    print("MDF Submission: ", mdfcc.get_submission())
-
-    is_update = bool(mdf_source_id)
 
     submit_response = mdfcc.submit_dataset(update=is_update)
 
@@ -67,13 +67,17 @@ def mdf_publish(source_urls):
         print(f"Submission Failed: {submit_response['error']}")
         sys.exit(1)
 
+    return submit_response['source_id']
+
 
 def list_files(path, recursive=False):
     """
-    Recursively list files in a directory.
+    Recursively list files in a directory. Works with a single file or a directory.
+    If you provide a directory it will return the list of files in that directory. If
+    you provide a filename then it just adds that file
 
     Args:
-    path: The directory to list files in.
+    path: The filenam or directory to list files in.
     recursive: Whether to recursively list files in subdirectories.
 
     Returns:
@@ -108,19 +112,21 @@ def main():
     print(f'S3 Bucket ID: {s3_bucket_id}')
     print(f'S3 Bucket Path: {s3_bucket_path}')
 
+    # Construct the list of files we will want to upload to MDF. Don't be 
+    # confused by leading spaces in the list
     path_list = [path.lstrip() for path in paths_to_publish.split(",")]
 
+    # Construct pre-signed URLs for each file by uploading to our staging bucket
     source_urls = []
     for path in path_list:
-        print(f"Searchiung in {path}")
         files = list_files(path, recursive=True)
-        print(f"Files = {files}")
         for file in files: 
             source_urls.append(upload_s3(s3_bucket_id, f"{s3_bucket_path}{file}", file))
 
-    mdf_publish(source_urls)
+    source_id = mdf_publish(source_urls)
+    return source_id
 
 if __name__ == "__main__": 
-    main()
-    print("Publish success")
+    source_id = main()
+    print(f"Publish success - SourceID = {source_id}")
     sys.exit(0)
