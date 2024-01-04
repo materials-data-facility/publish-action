@@ -50,8 +50,8 @@ inputs:
     description: "S3 Bucket Path"
     required: true
 outputs:
-  logs:
-    description: "Logs on processing"
+  source_id:
+    description: "Published dataset's source_id"
 
 runs:
   using: "docker"
