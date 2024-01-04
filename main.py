@@ -9,7 +9,8 @@ import os
 
 _, globus_auth_client_id, globus_auth_secret, \
     mdf_source_id, mdf_title, mdf_authors, mdf_affiliations, \
-    mdf_publication_year, paths_to_publish, is_test_str, staging_object_store_url, aws_access_key_id, \
+    mdf_publication_year, related_dois, paths_to_publish, is_test_str, \
+    staging_object_store_url, aws_access_key_id, \
     aws_secret_access_key, s3_bucket_id, s3_bucket_path = sys.argv 
 
 is_test = is_test_str == "true"
@@ -26,6 +27,9 @@ def set_github_action_output(output_name, output_value):
     f = open(os.path.abspath(os.environ["GITHUB_OUTPUT"]), "a")
     f.write(f'{output_name}={output_value}')
     f.close()    
+
+def transform_list(list_str: str) -> list[str]:
+    return [entry.lstrip() for entry in list_str.split(",")]
 
 def upload_s3(bucket_id, object_path, file):
     print(f"Uploading {file}")
@@ -49,7 +53,10 @@ def mdf_publish(source_urls) -> str:
 
     mdfcc = MDFConnectClient(authorizer=auths['mdf_connect'])
 
-    mdfcc.create_dc_block(title=mdf_title, authors=mdf_authors, affiliations=mdf_affiliations, publication_year=mdf_publication_year)
+    mdfcc.create_dc_block(title=mdf_title, authors=transform_list(mdf_authors),
+                          affiliations=transform_list(mdf_affiliations),
+                          related_dois=transform_list(related_dois),
+                          publication_year=mdf_publication_year)
 
     mdfcc.set_test(is_test)
 
@@ -66,6 +73,7 @@ def mdf_publish(source_urls) -> str:
         mdfcc.set_incremental_update(mdf_source_id)
 
 
+    print(mdfcc.get_submission())
     submit_response = mdfcc.submit_dataset(update=is_update)
 
     print("MDF Submit Update Response: ", submit_response)

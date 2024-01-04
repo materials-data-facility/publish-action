@@ -3,22 +3,23 @@ GitHub Action to Publish Dataset to Materials Data Facility by uploading files t
 Object Store staging area.
 
 ## Arguments:
-| Argument | Description |
-| -------- | ----------- |
-|  globus_auth_client_id| ID for Globus client that has MDF publish permissions|
-|  globus_auth_secret| Client secret |
-|  mdf_source_id| Provide the source ID of existing dataset if this is an update. |
-|  mdf_title| Dataset title |
-|  mdf_authors| List of dataset authors |
-|  mdf_affiliations| Coresponding list of author affiliations |
-|  mdf_publication_year| Publication year |
-|  paths_to_publish| Comma seperated list of paths in this repo to publish. Can be a file or a directory|
-|  is_test| Set to `true` if you want to publish to test MDF index and not prod |
-|  staging_object_store_url| Objectstore endpoint URL |
-|  aws_access_key_id| Access key to object store|
-|  aws_secret_access_key| Object store secret |
-|  s3_bucket_id| Bucket name to write staging files |
-|  s3_bucket_path| Path within bucket to write staging files |
+| Argument                 | Description                                                                         |
+|--------------------------|-------------------------------------------------------------------------------------|
+| globus_auth_client_id    | ID for Globus client that has MDF publish permissions                               |
+| globus_auth_secret       | Client secret                                                                       |
+| mdf_source_id            | Provide the source ID of existing dataset if this is an update.                     |
+| mdf_title                | Dataset title                                                                       |
+| mdf_authors              | List of dataset authors                                                             |
+| mdf_affiliations         | Coresponding list of author affiliations                                            |
+| mdf_publication_year     | Publication year                                                                    |
+| related_dois             | DOIs of related publications                                                        |
+| paths_to_publish         | Comma seperated list of paths in this repo to publish. Can be a file or a directory |
+| is_test                  | Set to `true` if you want to publish to test MDF index and not prod                 |
+| staging_object_store_url | Objectstore endpoint URL                                                            |
+| aws_access_key_id        | Access key to object store                                                          |
+| aws_secret_access_key    | Object store secret                                                                 |
+| s3_bucket_id             | Bucket name to write staging files                                                  |
+| s3_bucket_path           | Path within bucket to write staging files                                           |
 
 ## How to use:
 
