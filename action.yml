@@ -23,6 +23,10 @@ inputs:
   mdf_publication_year:
     description: "Dataset Publication Year"
     required: true
+  related_dois:
+    description: "Related DOIs"
+    required: false
+    default: ""
 
   paths_to_publish:
     description: "File Paths to Publish"
@@ -64,6 +68,7 @@ runs:
     - ${{ inputs.mdf_authors }}
     - ${{ inputs.mdf_affiliations }}
     - ${{ inputs.mdf_publication_year }}
+    - ${{ inputs.related_dois }}
     - ${{ inputs.paths_to_publish }}
     - ${{ inputs.is_test }}
     - ${{ inputs.staging_object_store_url }}
