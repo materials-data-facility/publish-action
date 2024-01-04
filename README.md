@@ -7,14 +7,14 @@ Object Store staging area.
 | -------- | ----------- |
 |  globus_auth_client_id| ID for Globus client that has MDF publish permissions|
 |  globus_auth_secret| Client secret |
-|  paths_to_publish| Comma seperated list of paths in this repo to publish. Can be a file or a directory|
 |  mdf_source_id| Provide the source ID of existing dataset if this is an update. |
 |  mdf_title| Dataset title |
 |  mdf_authors| List of dataset authors |
 |  mdf_affiliations| Coresponding list of author affiliations |
 |  mdf_publication_year| Publication year |
-|  staging_object_store_url| Objectstore endpoint URL |
+|  paths_to_publish| Comma seperated list of paths in this repo to publish. Can be a file or a directory|
 |  is_test| Set to `true` if you want to publish to test MDF index and not prod |
+|  staging_object_store_url| Objectstore endpoint URL |
 |  aws_access_key_id| Access key to object store|
 |  aws_secret_access_key| Object store secret |
 |  s3_bucket_id| Bucket name to write staging files |
@@ -54,14 +54,17 @@ jobs:
         with:
           globus_auth_client_id: ${{ env.GLOBUS_CLIENT_ID }}
           globus_auth_secret: ${{ env.GLOBUS_CLIENT_SECRET }}
-          paths_to_publish: "README.md, 0_interlayer_energy/data"
           mdf_source_id: "_test_shriram_readme_file_qmc_v1.1"
           mdf_title: "Readme File for QMC Data"
           mdf_authors: "Shriram, Ben"
           mdf_affiliations: "UIUC, NCSA"
           mdf_publication_year: "2023"
-          staging_object_store_url: ${{ env.AWS_ENDPOINT_URL }}
+
+          paths_to_publish: "README.md, 0_interlayer_energy/data"
+
           is_test: true
+          
+          staging_object_store_url: ${{ env.AWS_ENDPOINT_URL }}
           aws_access_key_id: ${{ env.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
           s3_bucket_id: ${{ env.AWS_S3_BUCKET }}

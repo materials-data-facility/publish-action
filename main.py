@@ -8,8 +8,8 @@ import os
 
 
 _, globus_auth_client_id, globus_auth_secret, \
-   paths_to_publish, mdf_source_id, mdf_title, mdf_authors, mdf_affiliations, \
-    mdf_publication_year, staging_object_store_url, is_test_str, aws_access_key_id, \
+    mdf_source_id, mdf_title, mdf_authors, mdf_affiliations, \
+    mdf_publication_year, paths_to_publish, is_test_str, staging_object_store_url, aws_access_key_id, \
     aws_secret_access_key, s3_bucket_id, s3_bucket_path = sys.argv 
 
 is_test = is_test_str == "true"
@@ -55,7 +55,7 @@ def mdf_publish(source_urls) -> str:
     is_update = bool(mdf_source_id)
 
 
-    if us_update:
+    if is_update:
         mdfcc.set_incremental_update(mdf_source_id)
 
 

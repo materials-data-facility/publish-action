@@ -8,9 +8,7 @@ inputs:
   globus_auth_secret:
     description: "Globus Auth Application Secret"
     required: true
-  paths_to_publish:
-    description: "File Paths to Publish"
-    required: true
+
   mdf_source_id:
     description: "Source ID for Dataset in Materials Data Facility"
   mdf_title:
@@ -25,8 +23,9 @@ inputs:
   mdf_publication_year:
     description: "Dataset Publication Year"
     required: true
-  staging_object_store_url:
-    description: "Staging Object Store URL"
+
+  paths_to_publish:
+    description: "File Paths to Publish"
     required: true
 
   is_test:
@@ -35,6 +34,9 @@ inputs:
     required: false
     type: boolean
 
+  staging_object_store_url:
+    description: "Staging Object Store URL"
+    required: true
   aws_access_key_id:
     description: "AWS Access Key ID"
     required: true
@@ -57,14 +59,14 @@ runs:
   args:
     - ${{ inputs.globus_auth_client_id }}
     - ${{ inputs.globus_auth_secret }}
-    - ${{ inputs.paths_to_publish }}
     - ${{ inputs.mdf_source_id }}
     - ${{ inputs.mdf_title }}
     - ${{ inputs.mdf_authors }}
     - ${{ inputs.mdf_affiliations }}
     - ${{ inputs.mdf_publication_year }}
-    - ${{ inputs.staging_object_store_url }}
+    - ${{ inputs.paths_to_publish }}
     - ${{ inputs.is_test }}
+    - ${{ inputs.staging_object_store_url }}
     - ${{ inputs.aws_access_key_id }}
     - ${{ inputs.aws_secret_access_key }}
     - ${{ inputs.s3_bucket_id }}
